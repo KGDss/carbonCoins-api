@@ -1,0 +1,19 @@
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model User {
+  id         Int       @id @default(autoincrement())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+  deleted_at DateTime?
+
+  username       String
+  password       String
+  email          String
+  wallet_address String
+  total_coins    Int?     @default(0)
+  used_coins     Int?     @default(0)
+  role           UserRole
+}
