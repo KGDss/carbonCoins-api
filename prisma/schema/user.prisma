@@ -9,11 +9,14 @@ model User {
   updated_at DateTime  @default(now())
   deleted_at DateTime?
 
-  username       String
+  username       String   @unique
   password       String
   email          String
   wallet_address String
   total_coins    Int?     @default(0)
   used_coins     Int?     @default(0)
   role           UserRole
+
+  @@unique([id])
+  @@map("users")
 }
