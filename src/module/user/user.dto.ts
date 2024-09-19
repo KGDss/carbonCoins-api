@@ -1,9 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { UserRole } from '@prisma/client';
 import { IsEnum, IsString } from 'class-validator';
-import { BaseGetOneDto } from 'src/base/get.dto';
+import { BaseGetAllDto, BaseGetOneDto } from 'src/base/get.dto';
 
 export class GetOneUserDto extends BaseGetOneDto {}
+
+export class GetAllUserDto extends BaseGetAllDto {}
 
 export class CreateUserDto {
   @ApiProperty({ required: true })
@@ -26,5 +28,3 @@ export class CreateUserDto {
   @IsEnum(UserRole)
   role: UserRole;
 }
-
-export class QueryUserDto {}

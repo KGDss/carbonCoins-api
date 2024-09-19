@@ -1,37 +1,29 @@
 import {
   Body,
   Controller,
+  Get,
   HttpException,
   HttpStatus,
   Post,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
-import { AuthLoginDto } from './auth.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { AuthService } from './auth.service';
-import { JwtService } from '@nestjs/jwt';
-import { CreateUserDto } from 'src/user/user.dto';
+import { UserRole } from '@prisma/client';
+import { Request } from 'express';
+import { JwtAuthGuard, LocalGuard, Roles } from 'src/cores/guard.service';
 import { PrismaService } from 'src/cores/prisma.service';
-import { comparePasswrod, encodePassword } from 'src/cores/utils.service';
+import { encodePassword } from 'src/cores/utils.service';
+import { CreateUserDto } from 'src/module/user/user.dto';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private authService: AuthService,
-    private jwtService: JwtService,
-    private prisma: PrismaService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
   @Post('login')
-  async login(@Body() { username, password }: AuthLoginDto) {
-    const user = await this.authService.fineOneUser({ username });
-
-    const isMatch = await comparePasswrod(password, user.password);
-
-    if (!isMatch) {
-      throw new HttpException('Incorrect Password', HttpStatus.BAD_REQUEST);
-    }
-
-    throw new HttpException('Login successfully', HttpStatus.OK);
+  @UseGuards(LocalGuard)
+  async login(@Req() req: Request) {
+    return req.user;
   }
 
   @Post('signup')
@@ -52,5 +44,12 @@ export class AuthController {
     });
 
     throw new HttpException('Success', HttpStatus.OK);
+  }
+
+  @Get('status')
+  @UseGuards(JwtAuthGuard)
+  @Roles(UserRole.ADMIN)
+  status(@Req() req: Request) {
+    return req.user;
   }
 }
