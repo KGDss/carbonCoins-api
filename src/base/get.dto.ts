@@ -19,6 +19,8 @@ export class PaginationRequest {
 export class BaseGetAllDto {
   @ApiPropertyOptional()
   @Transform(({ obj, key }) => (obj[key] = Number(obj[key])))
+  @IsNumber()
+  @IsOptional()
   limit?: number;
 
   @ApiPropertyOptional()

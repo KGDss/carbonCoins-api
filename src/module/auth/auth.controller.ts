@@ -43,7 +43,7 @@ export class AuthController {
       },
     });
 
-    throw new HttpException('Success', HttpStatus.OK);
+    return new HttpException('Success', HttpStatus.CREATED);
   }
 
   @Get('status')

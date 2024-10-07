@@ -1,9 +1,13 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, PartialType, PickType } from '@nestjs/swagger';
 import { UserRole } from '@prisma/client';
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { BaseGetAllDto, BaseGetOneDto } from 'src/base/get.dto';
-
-export class GetOneUserDto extends BaseGetOneDto {}
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { BaseGetAllDto } from 'src/base/get.dto';
 
 export class GetAllUserDto extends BaseGetAllDto {}
 
@@ -32,3 +36,7 @@ export class CreateUserDto {
   @IsEnum(UserRole)
   role: UserRole;
 }
+
+export class UpdateUserDto extends PartialType(
+  PickType(CreateUserDto, ['username', 'email']),
+) {}
