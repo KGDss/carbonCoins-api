@@ -48,7 +48,6 @@ export class AuthController {
 
   @Get('status')
   @UseGuards(JwtAuthGuard)
-  @Roles(UserRole.ADMIN)
   status(@Req() req: Request) {
     return req.user;
   }

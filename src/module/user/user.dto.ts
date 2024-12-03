@@ -38,5 +38,13 @@ export class CreateUserDto {
 }
 
 export class UpdateUserDto extends PartialType(
-  PickType(CreateUserDto, ['username', 'email']),
-) {}
+  PickType(CreateUserDto, ['username', 'email', 'wallet_address'] as const),
+) {
+  @IsOptional()
+  @IsNumber()
+  total_coins?: number;
+
+  @IsOptional()
+  @IsNumber()
+  used_coins?: number;
+}

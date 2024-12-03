@@ -1,0 +1,108 @@
+model Scope {
+  id         Int       @id @default(autoincrement())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+  deleted_at DateTime?
+
+  name        String
+  description String?
+
+  @@unique([id])
+  @@map("scopes")
+}
+
+model Topic {
+  id         Int       @id @default(autoincrement())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+  deleted_at DateTime?
+
+  scope_id    String
+  name        String
+  description String?
+  items       Item[]
+
+  @@unique([id])
+  @@map("topic")
+}
+
+model Item {
+  id         Int       @id @default(autoincrement())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+  deleted_at DateTime?
+
+  topic_id        Int
+  topic           Topic             @relation(fields: [topic_id], references: [id])
+  emission_factor EmissionFactors[]
+  report_detail   ReportDetail[]
+
+  scope_id    String
+  name        String
+  description String?
+  unit        String
+  amount      String
+
+  @@unique([id])
+  @@map("item")
+}
+
+model EmissionFactors {
+  id         Int       @id @default(autoincrement())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+  deleted_at DateTime?
+
+  item_id Int
+  item    Item @relation(fields: [item_id], references: [id])
+
+  co2        Float?
+  fossil_ch4 Float?
+  ch4        Float?
+  n2o        Float?
+  sf6        Float?
+  nf3        Float?
+  hfcs       Float?
+  pfcs       Float?
+  gwp_hfcs   Float?
+  gwp_pfcs   Float?
+
+  @@unique([id])
+  @@map("emission_factors")
+}
+
+model Report {
+  id         Int       @id @default(autoincrement())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+  deleted_at DateTime?
+
+  user_id Int
+  user    User @relation(fields: [user_id], references: [id])
+
+  report_name    String
+  date           DateTime
+  report_details ReportDetail[]
+
+  @@unique([id])
+  @@map("reports")
+}
+
+model ReportDetail {
+  id         Int       @id @default(autoincrement())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+  deleted_at DateTime?
+
+  report_id Int
+  report    Report @relation(fields: [report_id], references: [id])
+
+  item_id Int
+  item    Item @relation(fields: [item_id], references: [id])
+
+  amount Int
+  date   DateTime
+
+  @@unique([id])
+  @@map("report_details")
+}

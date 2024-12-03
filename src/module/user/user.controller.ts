@@ -21,23 +21,25 @@ import { PrismaService } from 'src/cores/prisma.service';
 @ApiTags('users')
 @Controller('user')
 @UseGuards(JwtAuthGuard)
-@Roles(UserRole.ADMIN)
 export class UserController {
   constructor(
     private readonly service: UserService,
     private prisma: PrismaService,
   ) {}
 
+  @Roles(UserRole.ADMIN)
   @Get(':id')
   async getOne(@Param('id', ParseIntPipe) id: number) {
     return await this.service.findOne({ id });
   }
 
+  @Roles(UserRole.ADMIN)
   @Get()
   async getAll(@Query() query: GetAllUserDto) {
     return await this.service.findAllByQuery(query);
   }
 
+  @Roles(UserRole.ADMIN, UserRole.USER)
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -60,6 +62,7 @@ export class UserController {
     return new HttpException('Success', HttpStatus.OK);
   }
 
+  @Roles(UserRole.ADMIN)
   @Delete(':id')
   async deleteUser(@Param('id', ParseIntPipe) id: number) {
     const user = await this.service.findOne({ id });

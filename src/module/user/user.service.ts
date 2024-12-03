@@ -6,7 +6,7 @@ import {
   getPagination,
   getSort,
 } from 'src/cores/utils.service';
-import { GetAllUserDto, UpdateUserDto } from './user.dto';
+import { GetAllUserDto } from './user.dto';
 
 const query = (query: GetAllUserDto) => {
   const where: Prisma.UserWhereInput = {};

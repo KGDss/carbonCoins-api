@@ -1,0 +1,16 @@
+model Transaction {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+
+  base_coin          String
+  to_coin            String
+  base_amount        Int
+  to_amount          String
+  target_account     String
+  created_by_user_id User     @relation(fields: [userId], references: [id])
+  role               UserRole
+  userId             Int
+
+  @@unique([id])
+  @@map("transaction")
+}
